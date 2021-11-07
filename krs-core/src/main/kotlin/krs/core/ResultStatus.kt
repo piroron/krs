@@ -37,6 +37,13 @@ sealed class ResultStatus<out S, out F> {
         }
     }
 
+    fun <S1, F1> bimap(success: (S) -> S1, failure: (F) -> F1): ResultStatus<S1, F1> {
+        return fold(
+            { Succeeded(success(it)) },
+            { Failed(failure(it)) },
+        )
+    }
+
     fun toNullable(): S? {
         return when(this) {
             is Succeeded -> value

@@ -92,4 +92,24 @@ internal class ResultStatusTest {
         Assertions.assertThat(actual.isSuccess()).isTrue
         Assertions.assertThat(actual).isInstanceOf(Succeeded::class.java)
     }
+
+    @Test
+    fun `bimap run if succeeded`() {
+        val v: ResultStatus<Int, String> = Succeeded(10)
+        val v2 = v.bimap(
+            success = { (it + 5).toString() },
+            failure = { it.length },
+        )
+        Assertions.assertThat(v2).isEqualTo(Succeeded("15"))
+    }
+
+    @Test
+    fun `bimap run if failed`() {
+        val v: ResultStatus<Int, String> = Failed("abcd")
+        val v2 = v.bimap(
+            success = { (it + 5).toString() },
+            failure = { it.length },
+        )
+        Assertions.assertThat(v2).isEqualTo(Failed(4))
+    }
 }
