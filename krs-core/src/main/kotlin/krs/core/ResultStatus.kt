@@ -69,7 +69,7 @@ data class Failed<out F>(val value: F): ResultStatus<Nothing, F>() {
 }
 
 
-fun <A, Success, Failure> ResultStatus<Success, Failure>.flatMap(f: (Success) -> ResultStatus<A, Failure>): ResultStatus<A, Failure> {
+fun <S1, S, F> ResultStatus<S, F>.flatMap(f: (S) -> ResultStatus<S1, F>): ResultStatus<S1, F> {
     return when(this) {
         is Succeeded -> f(value)
         is Failed -> this
